@@ -4,27 +4,6 @@ import { defineNuxtConfig } from 'nuxt/config'
 // import { pwa } from './app/config/pwa'
 import { appDescription } from './app/constants/index'
 
-// for cloudflare
-// Object.assign(process.env, {
-//   VITE_COMMIT_REF: process.env.CF_PAGES_COMMIT_SHA || '',
-// })
-
-try {
-  const { getLatestCommit } = await import('./scripts/git')
-  const latestCommit = await getLatestCommit()
-  /**
-   * CF_PAGES_COMMIT_SHA is Cloudflare Pages env
-   */
-  import.meta.env.VITE_COMMIT_REF = process.env.CF_PAGES_COMMIT_SHA || latestCommit?.hash || ''
-  // add build date string to env
-  import.meta.env.VITE_APP_BUILD_DATE = latestCommit?.date || new Date().toString()
-}
-catch (e) {
-  console.error('Not in git repo, get latest commit failed:', e)
-  import.meta.env.VITE_APP_BUILD_DATE = new Date().toString()
-  import.meta.env.VITE_COMMIT_REF = ''
-}
-
 export default defineNuxtConfig({
   modules: [
     '@vueuse/nuxt',
